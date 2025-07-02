@@ -1,6 +1,6 @@
 import random
 import string
-from datetime import datetime
+from datetime import datetime, date
 
 def generate_booking_reference():
     """Generate a unique booking reference"""
@@ -13,16 +13,16 @@ def generate_ticket_number():
 def calculate_total_price(flights, passengers, extras=None):
     """Calculate total booking price"""
     total = 0
-    
+
     for flight in flights:
         for passenger in passengers:
             travel_class = passenger.get('class', 'Economy')
             total += flight['prices'][travel_class]
-    
+
     # Add extras (baggage, meals, etc.)
     if extras:
         total += sum(extras.values())
-    
+
     return total
 
 def generate_seat_map(aircraft_model, travel_class):
@@ -42,27 +42,27 @@ def generate_seat_map(aircraft_model, travel_class):
             "First": {"rows": 1, "seats_per_row": "AB", "pitch": "84 inches"}
         }
     }
-    
+
     config = seat_configs.get(aircraft_model, seat_configs["Boeing 737-800"])
     class_config = config.get(travel_class, config["Economy"])
-    
+
     seats = []
     occupied_seats = set()
-    
+
     # Randomly occupy some seats
     total_seats = class_config["rows"] * len(class_config["seats_per_row"])
     num_occupied = random.randint(int(total_seats * 0.3), int(total_seats * 0.7))
-    
+
     for _ in range(num_occupied):
         row = random.randint(1, class_config["rows"])
         seat_letter = random.choice(class_config["seats_per_row"])
         occupied_seats.add(f"{row}{seat_letter}")
-    
+
     for row in range(1, class_config["rows"] + 1):
         for seat_letter in class_config["seats_per_row"]:
             seat_id = f"{row}{seat_letter}"
             seat_type = "window" if seat_letter in "AK" else "aisle" if seat_letter in "CF" else "middle"
-            
+
             seats.append({
                 "seat_id": seat_id,
                 "row": row,
@@ -71,7 +71,7 @@ def generate_seat_map(aircraft_model, travel_class):
                 "available": seat_id not in occupied_seats,
                 "price": 0 if travel_class != "Economy" else (25 if seat_type == "window" else 15 if seat_type == "aisle" else 0)
             })
-    
+
     return {
         "seats": seats,
         "config": class_config,
@@ -83,27 +83,29 @@ def validate_passenger_info(passenger):
     errors = []
 
     if not isinstance(passenger, dict):
-        errors.append("Invalid passenger data format.")
+        errors.append("Passenger data is missing or malformed.")
         return errors
-    
+
     required_fields = ['first_name', 'last_name', 'date_of_birth', 'nationality', 'passport_number']
-    
     for field in required_fields:
         if not passenger.get(field):
             errors.append(f"{field.replace('_', ' ').title()} is required")
-    
+
     # Validate passport number format (basic)
-    if passenger.get('passport_number') and len(passenger['passport_number']) < 6:
+    passport = passenger.get('passport_number')
+    if passport and len(passport) < 6:
         errors.append("Passport number must be at least 6 characters")
-    
+
     # Validate date of birth
-    if passenger.get('date_of_birth'):
+    dob = passenger.get('date_of_birth')
+    if dob:
         try:
-            dob_value = passenger['date_of_birth']
-            if isinstance(dob_value, datetime):
-                birth_date = dob_value
-            elif isinstance(dob_value, str):
-                birth_date = datetime.strptime(dob_value, '%Y-%m-%d')
+            if isinstance(dob, datetime):
+                birth_date = dob
+            elif isinstance(dob, date):
+                birth_date = datetime.combine(dob, datetime.min.time())
+            elif isinstance(dob, str):
+                birth_date = datetime.strptime(dob, "%Y-%m-%d")
             else:
                 raise ValueError("Unsupported date format")
 
@@ -111,7 +113,7 @@ def validate_passenger_info(passenger):
                 errors.append("Date of birth cannot be in the future")
         except Exception:
             errors.append("Invalid date of birth format")
-    
+
     return errors
 
 def create_booking(booking_data):
@@ -127,7 +129,7 @@ def create_booking(booking_data):
         "payment_status": "Paid",
         "tickets": []
     }
-    
+
     # Generate tickets for each passenger
     for passenger in booking_data["passengers"]:
         ticket = {
@@ -138,5 +140,5 @@ def create_booking(booking_data):
             "special_requests": passenger.get("special_requests", [])
         }
         booking["tickets"].append(ticket)
-    
+
     return booking
