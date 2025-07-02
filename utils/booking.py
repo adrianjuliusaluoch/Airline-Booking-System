@@ -82,8 +82,8 @@ def validate_passenger_info(passenger):
     """Validate passenger information"""
     errors = []
 
-    if not passenger:
-        errors.append("Passenger data is missing.")
+    if not isinstance(passenger, dict):
+        errors.append("Invalid passenger data format.")
         return errors
     
     required_fields = ['first_name', 'last_name', 'date_of_birth', 'nationality', 'passport_number']
