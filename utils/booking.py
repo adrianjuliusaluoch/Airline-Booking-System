@@ -95,10 +95,17 @@ def validate_passenger_info(passenger):
     # Validate date of birth
     if passenger.get('date_of_birth'):
         try:
-            birth_date = datetime.strptime(passenger['date_of_birth'], '%Y-%m-%d')
+            dob_value = passenger['date_of_birth']
+            if isinstance(dob_value, datetime):
+                birth_date = dob_value
+            elif isinstance(dob_value, str):
+                birth_date = datetime.strptime(dob_value, '%Y-%m-%d')
+            else:
+                raise ValueError("Unsupported date format")
+
             if birth_date > datetime.now():
                 errors.append("Date of birth cannot be in the future")
-        except ValueError:
+        except Exception:
             errors.append("Invalid date of birth format")
     
     return errors
