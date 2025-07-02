@@ -81,6 +81,10 @@ def generate_seat_map(aircraft_model, travel_class):
 def validate_passenger_info(passenger):
     """Validate passenger information"""
     errors = []
+
+    if not passenger:
+        errors.append("Passenger data is missing.")
+        return errors
     
     required_fields = ['first_name', 'last_name', 'date_of_birth', 'nationality', 'passport_number']
     
