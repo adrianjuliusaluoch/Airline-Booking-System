@@ -7,7 +7,7 @@ from utils.session import initialize_session
 
 # Page configuration
 st.set_page_config(
-    page_title="Kenya Airways - Book Your Flight",
+    page_title="Airline Airways - Book Your Flight",
     page_icon="✈️",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -16,50 +16,64 @@ st.set_page_config(
 # Initialize session state
 initialize_session()
 
-# Custom CSS for Kenya Airways styling
+# Custom Modern CSS with Inter Font
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+html, body, [class*="css"]  {
+    font-family: 'Inter', sans-serif;
+    color: #111827;
+}
+
 .main-header {
-    background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+    background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-bottom: 2rem;
     color: white;
     text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .feature-card {
-    background: white;
+    background: #ffffff;
     padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     margin: 1rem 0;
     border-left: 4px solid #1E40AF;
 }
 
 .destination-card {
-    background: white;
-    border-radius: 10px;
+    background: #ffffff;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     margin: 1rem 0;
+    transition: transform 0.2s ease-in-out;
+}
+
+.destination-card:hover {
+    transform: translateY(-4px);
 }
 
 .price-tag {
     background: #DC2626;
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: bold;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .promo-banner {
     background: linear-gradient(45deg, #DC2626, #EF4444);
     color: white;
-    padding: 1rem;
-    border-radius: 10px;
+    padding: 1rem 2rem;
+    border-radius: 12px;
     text-align: center;
-    margin: 1rem 0;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 </style>
 """, unsafe_allow_html=True)
@@ -73,7 +87,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Navigation
+# Navigation Tabs
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "🔍 Search Flights", 
     "✈️ Book Flight", 
@@ -85,31 +99,16 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "📝 Manage Booking"
 ])
 
-with tab1:
-    flight_search.show()
+with tab1: flight_search.show()
+with tab2: booking.show()
+with tab3: seat_selection.show()
+with tab4: passenger_info.show()
+with tab5: confirmation.show()
+with tab6: flight_status.show()
+with tab7: check_in.show()
+with tab8: manage_booking.show()
 
-with tab2:
-    booking.show()
-
-with tab3:
-    seat_selection.show()
-
-with tab4:
-    passenger_info.show()
-
-with tab5:
-    confirmation.show()
-
-with tab6:
-    flight_status.show()
-
-with tab7:
-    check_in.show()
-
-with tab8:
-    manage_booking.show()
-
-# Promotional banners
+# Promo Banner
 st.markdown("""
 <div class="promo-banner">
     <h3>🎉 Hot Deal Sale - Limited Time Offer!</h3>
@@ -117,9 +116,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Featured destinations
+# Popular Destinations
 st.markdown("## 🌍 Popular Destinations")
-
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -166,9 +164,8 @@ with col4:
     </div>
     """, unsafe_allow_html=True)
 
-# Services section
+# Our Services
 st.markdown("## 🛎️ Our Services")
-
 col1, col2, col3 = st.columns(3)
 
 with col1:
