@@ -8,7 +8,7 @@ from utils.session import initialize_session
 # Page configuration
 st.set_page_config(
     page_title="Airline Airways - Book Your Flight",
-    page_icon="✈️",
+    page_icon="✈",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -21,9 +21,9 @@ st.markdown("""
 <style>
 .main-header {
     background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 10px;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: white;
     text-align: center;
 }
@@ -53,21 +53,13 @@ st.markdown("""
     font-weight: bold;
 }
 
-.promo-banner {
-    background: linear-gradient(45deg, #DC2626, #EF4444);
-    color: white;
-    padding: 1rem;
-    border-radius: 10px;
-    text-align: center;
-    margin: 1rem 0;
-}
 </style>
 """, unsafe_allow_html=True)
 
 # Header
 st.markdown("""
 <div class="main-header">
-    <h1>🇰🇪 Kenya Airways</h1>
+    <h1>Airline Airways</h1>
     <h3>The Pride of Africa</h3>
     <p>Experience world-class service and comfort on your journey</p>
 </div>
